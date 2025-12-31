@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#05070C" />
+  <title>新年星光祝福</title>
+
+  <!-- 在线字体（可删；离线会回退系统字体） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#05070C; --bg2:#0B0F24; --bg3:#1A1238;
+      --txt:#F3F4F8;
+      --gold:#D8B56A;
+      --card: rgba(10,14,30,.56);
+      --stroke: rgba(216,181,106,.16);
+      --shadow: 0 22px 78px rgba(0,0,0,.55);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--txt);
+      font-family:"Noto Serif SC","Songti SC","STSong",serif;
+      background:
+        radial-gradient(900px 520px at 18% 12%, rgba(216,181,106,.10), transparent 62%),
+        radial-gradient(900px 520px at 82% 22%, rgba(108,168,255,.10), transparent 62%),
+        linear-gradient(160deg, var(--bg0), var(--bg2) 52%, var(--bg3));
+      overflow-x:hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body:before{
+      content:""; position:fixed; inset:0; pointer-events:none;
+      background-image:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.020) 0 1px, transparent 1px 3px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.012) 0 1px, transparent 1px 4px);
+      opacity:.35; mix-blend-mode: overlay;
+    }
+    .aurora{
+      position:fixed; inset:-22%;
+      background:
+        radial-gradient(closest-side at 25% 35%, rgba(108,168,255,.14), transparent 70%),
+        radial-gradient(closest-side at 62% 40%, rgba(216,181,106,.12), transparent 68%),
+        radial-gradient(closest-side at 42% 72%, rgba(176,120,255,.10), transparent 72%);
+      filter: blur(46px);
+      opacity:.55;
+      animation: drift 18s ease-in-out infinite alternate;
+      pointer-events:none;
+      z-index:0;
+    }
+    @keyframes drift{
+      0%{transform: translate3d(-2%,-1%,0) scale(1.02) rotate(0deg)}
+      100%{transform: translate3d(2%,2%,0) scale(1.06) rotate(2deg)}
+    }
+
+    canvas#stars, canvas#form, canvas#fx, canvas#dust{
+      position:fixed; inset:0; width:100%; height:100%;
+      pointer-events:none;
+    }
+    canvas#stars{z-index:1}
+    canvas#form{z-index:2}
+    canvas#fx{z-index:3}
+    canvas#dust{z-index:4}
+
+    .wrap{position:relative; z-index:5; max-width:980px; margin:0 auto; padding:18px 18px 88px;}
+    .topbar{position:sticky; top:0; z-index:30; padding:10px 0 14px; backdrop-filter: blur(10px);}
+    .topbar .row{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 14px; border-radius:999px;
+      background: rgba(5,7,12,.58);
+      border:1px solid rgba(216,181,106,.18);
+      box-shadow: 0 10px 32px rgba(0,0,0,.35);
+      gap:10px;
+    }
+    .badge{
+      font-family:"Noto Sans SC",system-ui,sans-serif;
+      font-size:12px; color:rgba(243,244,248,.72);
+      letter-spacing:.25px; white-space:nowrap;
+    }
+    .hint{
+      font-family:"Noto Sans SC",system-ui,sans-serif;
+      font-size:12px; color:rgba(243,244,248,.78);
+      display:flex; align-items:center; gap:8px; white-space:nowrap;
+    }
+    .dot{width:6px;height:6px;border-radius:999px;background:var(--gold); box-shadow:0 0 18px rgba(216,181,106,.9);}
+
+    .hero{min-height:72vh; display:flex; flex-direction:column; justify-content:center; gap:16px; padding:14px 0 18px;}
+    .title{margin:0; font-size:54px; line-height:1.05; letter-spacing:1px; font-weight:600; text-shadow:0 14px 60px rgba(0,0,0,.55);}
+    .subtitle{margin:0; font-family:"Noto Sans SC",system-ui,sans-serif; font-weight:300; color:rgba(243,244,248,.82); font-size:16px; letter-spacing:.6px;}
+    .lead{margin:0; max-width:52ch; font-family:"Noto Sans SC",system-ui,sans-serif; font-size:15px; line-height:2.0; color:rgba(243,244,248,.80);}
+    .btns{display:flex; gap:12px; flex-wrap:wrap; align-items:center;}
+    button{
+      border:0; cursor:pointer; border-radius:999px;
+      padding:12px 16px;
+      font-family:"Noto Sans SC",system-ui,sans-serif;
+      font-weight:700; font-size:14px;
+      transition: transform .14s ease, filter .2s ease;
+    }
+    button:active{transform:scale(.98)}
+    .primary{background: linear-gradient(135deg, rgba(216,181,106,.96), rgba(216,181,106,.55)); color:#111018; box-shadow:0 14px 40px rgba(216,181,106,.18);}
+    .ghost{background: rgba(255,255,255,.06); color: rgba(243,244,248,.92); border: 1px solid rgba(216,181,106,.22);}
+    .mini{font-family:"Noto Sans SC",system-ui,sans-serif; font-size:12px; color:rgba(243,244,248,.62); line-height:1.7;}
+
+    .section{margin-top:18px}
+    .card{border-radius:var(--radius); background:var(--card); border:1px solid var(--stroke); box-shadow:var(--shadow); padding:18px 18px 16px;}
+    .h2{margin:0 0 10px; font-size:18px; letter-spacing:.6px;}
+    .p{margin:0; font-family:"Noto Sans SC",system-ui,sans-serif; font-size:14px; line-height:2.0; color:rgba(243,244,248,.80);}
+    .poem{display:grid; gap:10px; margin-top:10px}
+    .line{padding:12px 14px; border-radius:14px; background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); font-size:16px; line-height:1.75;}
+    .signature{margin-top:12px; font-size:16px; color:rgba(243,244,248,.82);}
+
+    .reveal{opacity:0; transform: translateY(14px); transition: opacity .9s ease, transform .9s ease;}
+    .reveal.in{opacity:1; transform: translateY(0)}
+
+    .scratchBox{
+      margin-top:12px; position:relative;
+      border-radius:18px; border:1px solid rgba(255,255,255,.10);
+      overflow:hidden; background: rgba(255,255,255,.03);
+      min-height:160px;
+    }
+    .secret{padding:16px 14px 34px; text-align:left;}
+    .secretName{font-family:"Noto Serif SC",serif; font-size:18px; font-weight:700; letter-spacing:.4px; margin-bottom:6px;}
+    .secretMsg{font-family:"Noto Sans SC",system-ui,sans-serif; font-size:14px; line-height:1.95; color:rgba(243,244,248,.86);}
+    .secretFrom{
+      position:absolute; right:14px; bottom:10px;
+      font-family:"Noto Sans SC",system-ui,sans-serif;
+      font-size:12px; color:rgba(243,244,248,.62);
+      white-space:nowrap;
+    }
+    #scratch{
+      position:absolute; inset:0; width:100%; height:100%;
+      border-radius:18px; touch-action:none;
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .scratchBox.done #scratch{opacity:0; transform: translateY(-2px); pointer-events:none;}
+
+    .foot{margin-top:24px; text-align:center; font-family:"Noto Sans SC",system-ui,sans-serif; font-size:12px; color:rgba(243,244,248,.52);}
+
+    @media (prefers-reduced-motion: reduce){
+      .aurora{animation:none}
+      .reveal{opacity:1; transform:none; transition:none}
+      button{transition:none}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="aurora"></div>
+  <canvas id="stars"></canvas>
+  <canvas id="form"></canvas>
+  <canvas id="fx"></canvas>
+  <canvas id="dust"></canvas>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="row">
+        <div class="badge" id="nowText">2026-01-01 00:00</div>
+        <div class="hint"><span class="dot"></span><span>点空白处：小烟花</span></div>
+      </div>
+    </div>
+
+    <section class="hero">
+      <h1 class="title reveal" id="toNameBig">朋友</h1>
+      <p class="subtitle reveal"><span id="subTitle">新年快乐</span> · <span id="yearText">2026</span></p>
+      <p class="lead reveal" id="leadText">我想把新年的第一份认真，做成一个页面，发给你。</p>
+
+      <div class="btns reveal">
+        <button class="primary" id="btnForm">星光为你成字</button>
+        <button class="ghost" id="btnBigFire">放一场烟花</button>
+      </div>
+
+    </section>
+
+    <section class="section reveal">
+      <div class="card">
+        <div class="h2">三句祝福</div>
+        <div class="poem" id="poemBox"></div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="card">
+        <div class="h2">想对你说</div>
+        <p class="p" id="letterText"></p>
+        <div class="signature" id="fromName">——姜南</div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <div class="card">
+        <div class="h2">最后的小彩蛋</div>
+        <p class="p">用手指轻轻刮开（刮开超过一半会自动完成）。</p>
+        <div class="scratchBox" id="scratchBox">
+          <div class="secret">
+            <div class="secretName" id="secretName">朋友</div>
+            <div class="secretMsg" id="secretMsg">（刮开后会出现）</div>
+            <div class="secretFrom" id="secretFrom">——姜南</div>
+          </div>
+          <canvas id="scratch"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <div class="foot" id="footTime"></div>
+  </div>
+
+<script>
+(() => {
+  /* =========================
+     朋友版：支持 URL 参数
+     用法示例：
+     ?to=小王&from=姜贤科&sub=元旦快乐
+     ?to=阿强&from=我&msg=新年快乐%0A祝你天天开心
+     ?p1=...&p2=...&p3=...
+  ========================== */
+  const DEFAULT = {
+    toName: "朋友",
+    fromName: "——姜南",
+    sub: "新年快乐",
+    lead: "我想把新年的第一份认真，做成一个页面，发给你。",
+    poem: ["平安喜乐。", "万事顺意。", "越来越好。"],
+    letterHTML: `愿你新的一年，<br/>日子松弛、心里有光，<br/>所求皆可慢慢到达。`,
+    secretBefore: "轻轻刮开，会有一句只给你的祝福。",
+    secretAfter: "新年快乐。愿你今年所有愿望都慢慢实现。"
+  };
+
+  function q(name){
+    const u = new URL(location.href);
+    const v = u.searchParams.get(name);
+    return v ? v : "";
+  }
+  function decodePlus(s){
+    try{
+      return decodeURIComponent(String(s).replace(/\+/g, "%20"));
+    }catch(_){ return String(s); }
+  }
+
+  const CONFIG = {
+    ...DEFAULT,
+    toName: decodePlus(q("to")) || DEFAULT.toName,
+    fromName: decodePlus(q("from")) || DEFAULT.fromName,
+    sub: decodePlus(q("sub")) || DEFAULT.sub,
+    lead: decodePlus(q("lead")) || DEFAULT.lead,
+    // msg：写在“想对你说”
+    msg: decodePlus(q("msg")),
+    p1: decodePlus(q("p1")),
+    p2: decodePlus(q("p2")),
+    p3: decodePlus(q("p3")),
+    // 彩蛋两段
+    sb: decodePlus(q("sb")),
+    sa: decodePlus(q("sa"))
+  };
+
+  if(CONFIG.msg){
+    // 允许用 %0A 换行
+    const lines = CONFIG.msg.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+    CONFIG.letterHTML = lines.map(l=>l.replace(/</g,"&lt;").replace(/>/g,"&gt;")).join("<br/>");
+  }
+
+  if(CONFIG.p1 || CONFIG.p2 || CONFIG.p3){
+    CONFIG.poem = [
+      CONFIG.p1 || DEFAULT.poem[0],
+      CONFIG.p2 || DEFAULT.poem[1],
+      CONFIG.p3 || DEFAULT.poem[2]
+    ];
+  }
+
+  if(CONFIG.sb) CONFIG.secretBefore = CONFIG.sb;
+  if(CONFIG.sa) CONFIG.secretAfter  = CONFIG.sa;
+
+  const $ = (s)=>document.querySelector(s);
+
+  // DOM
+  $("#toNameBig").textContent = CONFIG.toName;
+  $("#subTitle").textContent = CONFIG.sub;
+  $("#leadText").textContent = CONFIG.lead;
+  $("#fromName").textContent = CONFIG.fromName;
+
+  $("#poemBox").innerHTML = CONFIG.poem.map(t=>`<div class="line">${t}</div>`).join("");
+  $("#letterText").innerHTML = CONFIG.letterHTML;
+
+  $("#secretName").textContent = CONFIG.toName;
+  $("#secretMsg").textContent  = CONFIG.secretBefore;
+  $("#secretFrom").textContent = CONFIG.fromName;
+
+  // time
+  const pad = n=>String(n).padStart(2,"0");
+  function updateTime(){
+    const d = new Date();
+    $("#yearText").textContent = d.getFullYear();
+    const t = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}  ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    $("#nowText").textContent = t;
+    $("#footTime").textContent = `在 ${d.getFullYear()} 年的此刻，把这份祝福发给你。`;
+  }
+  updateTime(); setInterval(updateTime, 30000);
+
+  // reveal
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add("in"); });
+  }, {threshold:0.12});
+  document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+  /* =========================
+     Canvas
+  ========================== */
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const cStars = $("#stars");
+  const cForm  = $("#form");
+  const cFx    = $("#fx");
+  const cDust  = $("#dust");
+
+  const sctx = cStars.getContext("2d", {alpha:true});
+  const fctx = cForm.getContext("2d",  {alpha:true});
+  const xctx = cFx.getContext("2d",    {alpha:true});
+  const dctx = cDust.getContext("2d",  {alpha:true});
+
+  let W=0,H=0,dpr=1;
+  const rand = (a,b)=> a + Math.random()*(b-a);
+
+  function fitCanvas(canvas, ctx){
+    canvas.width  = Math.floor(W * dpr);
+    canvas.height = Math.floor(H * dpr);
+    canvas.style.width = W + "px";
+    canvas.style.height= H + "px";
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  // stars
+  let stars = [];
+  function initStars(){
+    const base = Math.floor(Math.max(80, Math.min(160, W * 0.28)));
+    const count = reduceMotion ? Math.floor(base*0.55) : base;
+    stars = Array.from({length:count}, () => ({
+      x: Math.random()*W,
+      y: Math.random()*H,
+      r: Math.random()*1.2 + 0.3,
+      a: Math.random()*0.40 + 0.06,
+      s: Math.random()*0.18 + 0.03,
+      tw: Math.random()*0.015 + 0.005
+    }));
+  }
+
+  // particle text
+  const off = document.createElement("canvas");
+  const offCtx = off.getContext("2d", {willReadFrequently:true});
+  let targets = [];
+  let dots = [];
+  let formed = false;
+
+  function buildTargets(){
+    const areaW = Math.min(980, Math.max(360, W - 24));
+    const areaH = Math.min(340, Math.max(250, Math.floor(H * 0.36)));
+
+    const scale = Math.max(2, Math.round(dpr * 1.6)); // 2~3
+    off.width  = Math.floor(areaW * scale);
+    off.height = Math.floor(areaH * scale);
+    offCtx.setTransform(scale,0,0,scale,0,0);
+    offCtx.clearRect(0,0,areaW,areaH);
+
+    offCtx.fillStyle = "#fff";
+    offCtx.textAlign = "center";
+    offCtx.textBaseline = "middle";
+
+    let fs1 = Math.min(104, Math.max(62, areaW * 0.23));
+    const maxW = areaW * 0.92;
+    while(true){
+      offCtx.font = `700 ${fs1}px "Noto Serif SC","Songti SC","STSong",serif`;
+      if(offCtx.measureText(CONFIG.toName).width <= maxW || fs1 <= 44) break;
+      fs1 -= 2;
+    }
+
+    const nameX = areaW/2;
+    const nameY = areaH*0.45;
+
+    // stroke + fill: 防细笔画丢点
+    offCtx.save();
+    offCtx.lineJoin = "round";
+    offCtx.lineCap = "round";
+    offCtx.miterLimit = 2;
+    offCtx.lineWidth = Math.max(2.4, fs1 * 0.06);
+    offCtx.strokeStyle = "#fff";
+    offCtx.strokeText(CONFIG.toName, nameX, nameY);
+    offCtx.fillText(CONFIG.toName, nameX, nameY);
+    offCtx.restore();
+
+    // 第二行祝福（固定写在名字下方）
+    const fs2 = Math.min(34, Math.max(20, areaW * 0.062));
+    offCtx.font = `700 ${fs2}px "Noto Sans SC","PingFang SC",sans-serif`;
+    offCtx.fillText(CONFIG.sub, areaW/2, areaH*0.72);
+
+    const img = offCtx.getImageData(0,0,off.width,off.height).data;
+    const gap = Math.max(4, Math.floor(off.width / 320));
+    const xOffset = (W - areaW)/2;
+    const yOffset = Math.max(70, H * 0.11);
+
+    targets = [];
+    for(let y=0; y<off.height; y+=gap){
+      for(let x=0; x<off.width; x+=gap){
+        const a = img[(y*off.width + x)*4 + 3];
+        if(a > 18){
+          targets.push({ x: x/scale + xOffset, y: y/scale + yOffset });
+        }
+      }
+    }
+
+    const cap = reduceMotion ? 1600 : 3200;
+    if(targets.length > cap){
+      const step = Math.ceil(targets.length / cap);
+      targets = targets.filter((_,i)=> i % step === 0);
+    }
+
+    dots = targets.map(t=>({
+      x: rand(0,W), y: rand(0,H),
+      vx:0, vy:0,
+      tx:t.x, ty:t.y,
+      r: rand(0.9, 1.8),
+      hue: (Math.random()<0.62) ? rand(38,56) : rand(200,222),
+      a: rand(0.55, 0.95)
+    }));
+
+    formed = true;
+  }
+
+  function scatterDots(){
+    if(!formed) return;
+    dots.forEach(p=>{
+      p.tx = rand(0,W);
+      p.ty = rand(H*0.06, H*0.60);
+    });
+  }
+  function formDots(){
+    if(!formed) return;
+    dots.forEach((p,i)=>{
+      const t = targets[i % targets.length];
+      p.tx = t.x; p.ty = t.y;
+    });
+  }
+
+  // state machine for single click toggle
+  const btnForm = $("#btnForm");
+  let isFormState = false;
+  function setFormState(next){
+    isFormState = next;
+    if(isFormState){
+      formDots();
+      btnForm.textContent = "让星光散开";
+      sprinkle(0.45);
+    }else{
+      scatterDots();
+      btnForm.textContent = "星光为你成字";
+    }
+  }
+  function rebuildTargetsPreserveState(){
+    const keep = isFormState;
+    buildTargets();
+    setFormState(keep);
+  }
+
+  // fireworks
+  const sparks = [];
+  function spawnFirework(x,y,power=1){
+    const count = Math.floor(rand(85, 115) * power);
+    const palette = [
+      {h:42,s:72,l:66},
+      {h:210,s:72,l:68},
+      {h:48,s:62,l:72}
+    ];
+    for(let i=0;i<count;i++){
+      const ang = rand(0, Math.PI*2);
+      const spd = rand(2.0, 6.4) * power;
+      const c = palette[Math.floor(rand(0,palette.length))];
+      sparks.push({
+        x,y, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd,
+        g: rand(0.04, 0.09),
+        drag: rand(0.982, 0.990),
+        life: rand(58, 92),
+        a: 1,
+        r: rand(1.1, 2.2),
+        h: c.h, s: c.s, l: c.l
+      });
+    }
+  }
+
+  // dust confetti
+  const dustBits = [];
+  function sprinkle(strength=1){
+    const n = Math.floor(150 * strength);
+    const cx = W*0.5, cy = H*0.30;
+    for(let i=0;i<n;i++){
+      dustBits.push({
+        x: cx + rand(-70,70),
+        y: cy + rand(-18,18),
+        vx: rand(-2.8,2.8)*strength,
+        vy: rand(-1.8,3.8)*strength,
+        rot: rand(0,Math.PI),
+        vr: rand(-.18,.18),
+        w: rand(6,10),
+        h: rand(3,7),
+        a: 1,
+        life: rand(90,130),
+        c: (Math.random()<0.74) ? "rgba(216,181,106,.95)" : "rgba(243,244,248,.85)"
+      });
+    }
+  }
+
+  // resize
+  function drawScratchCover(){} // defined later
+  function resize(){
+    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    W = innerWidth; H = innerHeight;
+    fitCanvas(cStars, sctx);
+    fitCanvas(cForm,  fctx);
+    fitCanvas(cFx,    xctx);
+    fitCanvas(cDust,  dctx);
+    initStars();
+    rebuildTargetsPreserveState();
+    drawScratchCover();
+  }
+  addEventListener("resize", resize, {passive:true});
+
+  // init
+  (function initOnce(){
+    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    W = innerWidth; H = innerHeight;
+    fitCanvas(cStars, sctx);
+    fitCanvas(cForm,  fctx);
+    fitCanvas(cFx,    xctx);
+    fitCanvas(cDust,  dctx);
+    initStars();
+    buildTargets();
+    setFormState(false);
+  })();
+
+  // font ready rebuild
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(()=>rebuildTargetsPreserveState());
+  }
+
+  // loop
+  const pointer = {x:0,y:0,on:false};
+
+  function drawStars(t){
+    sctx.clearRect(0,0,W,H);
+    for(const p of stars){
+      p.y += reduceMotion ? p.s*0.45 : p.s;
+      if(p.y > H + 10){ p.y = -10; p.x = Math.random()*W; }
+      const tw = (Math.sin((t||0) * p.tw) * 0.25 + 0.75);
+      sctx.globalAlpha = p.a * tw;
+      sctx.fillStyle = "rgba(243,244,248,1)";
+      sctx.beginPath();
+      sctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      sctx.fill();
+    }
+    sctx.globalAlpha = 1;
+  }
+
+  function drawForm(){
+    fctx.clearRect(0,0,W,H);
+    fctx.globalCompositeOperation = "lighter";
+    for(const p of dots){
+      const ax = (p.tx - p.x) * 0.018;
+      const ay = (p.ty - p.y) * 0.018;
+      p.vx = (p.vx + ax) * 0.88;
+      p.vy = (p.vy + ay) * 0.88;
+
+      if(pointer.on){
+        const dx = p.x - pointer.x, dy = p.y - pointer.y;
+        const d2 = dx*dx + dy*dy;
+        if(d2 < 120*120){
+          const d = Math.sqrt(d2) || 1;
+          const push = (120 - d) / 120 * 0.9;
+          p.vx += (dx/d) * push * 0.25;
+          p.vy += (dy/d) * push * 0.25;
+        }
+      }
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      fctx.globalAlpha = p.a;
+      fctx.fillStyle = `hsla(${p.hue} 75% 70% / ${p.a})`;
+      fctx.beginPath();
+      fctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      fctx.fill();
+    }
+    fctx.globalAlpha = 1;
+    fctx.globalCompositeOperation = "source-over";
+  }
+
+  function drawFireworks(){
+    xctx.clearRect(0,0,W,H);
+    xctx.globalCompositeOperation = "lighter";
+    for(let i=sparks.length-1;i>=0;i--){
+      const p = sparks[i];
+      p.x += p.vx; p.y += p.vy;
+      p.vx *= p.drag;
+      p.vy = p.vy*p.drag + p.g*8;
+      p.life -= 1;
+      p.a *= 0.976;
+
+      const alpha = Math.max(0, p.a);
+      if(alpha > 0.02){
+        xctx.globalAlpha = alpha;
+        xctx.fillStyle = `hsla(${p.h} ${p.s}% ${p.l}% / ${alpha})`;
+        xctx.beginPath();
+        xctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        xctx.fill();
+      }
+      if(p.life<=0 || p.a<0.02 || p.x<-60 || p.x>W+60 || p.y<-60 || p.y>H+140){
+        sparks.splice(i,1);
+      }
+    }
+    xctx.globalAlpha = 1;
+    xctx.globalCompositeOperation = "source-over";
+  }
+
+  function drawDust(){
+    dctx.clearRect(0,0,W,H);
+    for(let i=dustBits.length-1;i>=0;i--){
+      const b = dustBits[i];
+      b.x += b.vx; b.y += b.vy;
+      b.vy += 0.10;
+      b.vx *= 0.992;
+      b.rot += b.vr;
+      b.life -= 1;
+      b.a *= 0.988;
+
+      dctx.save();
+      dctx.globalAlpha = Math.max(0,b.a);
+      dctx.translate(b.x,b.y);
+      dctx.rotate(b.rot);
+      dctx.fillStyle = b.c;
+      dctx.fillRect(-b.w/2, -b.h/2, b.w, b.h);
+      dctx.restore();
+
+      if(b.life<=0 || b.y>H+90 || b.a<0.03) dustBits.splice(i,1);
+    }
+  }
+
+  function loop(t){
+    drawStars(t);
+    drawForm();
+    drawFireworks();
+    drawDust();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  // interactions
+  btnForm.addEventListener("click", ()=> setFormState(!isFormState));
+  $("#btnBigFire").addEventListener("click", ()=>{
+    spawnFirework(W*0.50, H*0.28, 1.25);
+    spawnFirework(W*0.34, H*0.40, 0.92);
+    spawnFirework(W*0.66, H*0.40, 0.92);
+  });
+
+  addEventListener("pointerdown", (e)=>{
+    if(e.target.closest("button")) return;
+    if(e.target.id === "scratch") return;
+    spawnFirework(e.clientX, e.clientY, 0.9);
+  }, {passive:true});
+
+  addEventListener("pointermove", (e)=>{
+    pointer.on = true;
+    pointer.x = e.clientX; pointer.y = e.clientY;
+  }, {passive:true});
+  addEventListener("pointerleave", ()=>{ pointer.on = false; });
+
+  /* =========================
+     Scratch card
+  ========================== */
+  const scratchBox = $("#scratchBox");
+  const scratchCanvas = $("#scratch");
+  const scratchCtx = scratchCanvas.getContext("2d", {willReadFrequently:true});
+  let scratching = false;
+
+  function sizeScratchCanvas(){
+    const rect = scratchBox.getBoundingClientRect();
+    const w = Math.max(260, rect.width);
+    const h = Math.max(160, rect.height);
+    scratchCanvas.width = Math.floor(w * dpr);
+    scratchCanvas.height= Math.floor(h * dpr);
+    scratchCanvas.style.width = w + "px";
+    scratchCanvas.style.height= h + "px";
+    scratchCtx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  drawScratchCover = function(){
+    try{ sizeScratchCanvas(); }catch(_){ return; }
+    const w = scratchCanvas.width / dpr;
+    const h = scratchCanvas.height / dpr;
+
+    scratchCtx.globalCompositeOperation = "source-over";
+    scratchCtx.clearRect(0,0,w,h);
+
+    const g = scratchCtx.createLinearGradient(0,0,w,h);
+    g.addColorStop(0, "rgba(216,181,106,.55)");
+    g.addColorStop(0.45, "rgba(243,244,248,.22)");
+    g.addColorStop(1, "rgba(108,168,255,.18)");
+    scratchCtx.fillStyle = g;
+    scratchCtx.fillRect(0,0,w,h);
+
+    scratchCtx.globalAlpha = 0.18;
+    for(let i=0;i<60;i++){
+      scratchCtx.fillStyle = (i%2===0) ? "rgba(0,0,0,.25)" : "rgba(255,255,255,.25)";
+      const x = (i*29)%w;
+      const y = (i*17)%h;
+      scratchCtx.fillRect(x,y, 1, 1);
+    }
+    scratchCtx.globalAlpha = 1;
+
+    scratchCtx.fillStyle = "rgba(10,10,12,.75)";
+    scratchCtx.font = `700 16px "Noto Sans SC", system-ui, sans-serif`;
+    scratchCtx.textAlign = "center";
+    scratchCtx.textBaseline = "middle";
+    scratchCtx.fillText("轻轻刮开", w/2, h/2 - 10);
+
+    scratchCtx.font = `400 12px "Noto Sans SC", system-ui, sans-serif`;
+    scratchCtx.fillStyle = "rgba(10,10,12,.62)";
+    scratchCtx.fillText("（刮出你的新年彩蛋）", w/2, h/2 + 14);
+
+    scratchBox.classList.remove("done");
+    $("#secretMsg").textContent = CONFIG.secretBefore;
+  };
+
+  function scratchAt(x,y){
+    const w = scratchCanvas.width / dpr;
+    const h = scratchCanvas.height / dpr;
+    if(x<0||y<0||x>w||y>h) return;
+
+    scratchCtx.save();
+    scratchCtx.globalCompositeOperation = "destination-out";
+
+    const r = 22;
+    const rg = scratchCtx.createRadialGradient(x,y,0,x,y,r);
+    rg.addColorStop(0, "rgba(0,0,0,0.90)");
+    rg.addColorStop(1, "rgba(0,0,0,0)");
+    scratchCtx.fillStyle = rg;
+
+    scratchCtx.beginPath();
+    scratchCtx.arc(x,y,r,0,Math.PI*2);
+    scratchCtx.fill();
+
+    scratchCtx.restore();
+  }
+
+  function scratchedRatio(){
+    const w = scratchCanvas.width;
+    const h = scratchCanvas.height;
+    const img = scratchCtx.getImageData(0,0,w,h).data;
+
+    const step = Math.floor(12 * dpr);
+    let total = 0, remain = 0;
+
+    for(let y=0; y<h; y+=step){
+      for(let x=0; x<w; x+=step){
+        const a = img[(y*w + x)*4 + 3];
+        total++;
+        if(a > 30) remain++;
+      }
+    }
+    return 1 - (remain / total);
+  }
+
+  function finishScratch(){
+    if(scratchBox.classList.contains("done")) return;
+    scratchBox.classList.add("done");
+
+    const msg = $("#secretMsg");
+    msg.style.transition = "opacity .25s ease, transform .25s ease";
+    msg.style.opacity = "0";
+    msg.style.transform = "translateY(4px)";
+    setTimeout(() => {
+      msg.textContent = CONFIG.secretAfter;
+      msg.style.opacity = "1";
+      msg.style.transform = "translateY(0)";
+    }, 220);
+
+    sprinkle(1.0);
+    spawnFirework(W*0.50, H*0.32, 1.05);
+  }
+
+  scratchCanvas.addEventListener("pointerdown", (e)=>{
+    scratching = true;
+    scratchCanvas.setPointerCapture(e.pointerId);
+    const rect = scratchCanvas.getBoundingClientRect();
+    scratchAt(e.clientX - rect.left, e.clientY - rect.top);
+  });
+  scratchCanvas.addEventListener("pointermove", (e)=>{
+    if(!scratching) return;
+    const rect = scratchCanvas.getBoundingClientRect();
+    scratchAt(e.clientX - rect.left, e.clientY - rect.top);
+  });
+  scratchCanvas.addEventListener("pointerup", ()=>{
+    scratching = false;
+    if(scratchedRatio() >= 0.55) finishScratch();
+  });
+  scratchCanvas.addEventListener("pointercancel", ()=>{ scratching = false; });
+
+  drawScratchCover();
+})();
+</script>
+</body>
+</html>
